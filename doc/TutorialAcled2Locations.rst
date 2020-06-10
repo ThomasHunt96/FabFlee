@@ -61,4 +61,4 @@ Using the Command
 | 
 | This will output a locations.csv into the input_csv directory for the given country, so in this case the .csv can be found in /FabFlee/config_files/mali/input_csv/locations.csv. If there is not input_csv folder, one will be created.
 | 
-| Currently the population figures for each location will need to be collected and written to the "population/capacity" column manually using a resource such as `www.citypopulation.de <https://www.citypopulation.de>`_.
+| Currently the population figures for each location will need to be collected and written to the "population/capacity" column manually using a resource such as `www.citypopulation.de <https://www.citypopulation.de>`_. After the population data has been collected your locations.csv is ready for simulations.
