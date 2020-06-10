@@ -1,6 +1,6 @@
 
 ========================================================
-Automation for creating a locations .csv from ACLED Data
+Automation for creating a locations.csv from ACLED Data
 ========================================================
 
 | By using the ``fabsim process_acled`` command it is possible to construct a locations.csv file using data from `acleddata.com <https://www.acleddata.com>`_  for use in FabFlee simulations. The locations.csv will be in the following format:
