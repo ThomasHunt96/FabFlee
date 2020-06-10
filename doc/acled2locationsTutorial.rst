@@ -46,11 +46,14 @@ Using the Command
 ^^^^^^^^^^^^^^^^^
 | The command uses the following syntax:
 | ``fabsim localhost process_acled:``
+| ``country="country",start_date="dd-mm-yyyy",filter="[earliest/fatalities]"``
+| If your .csv file is not stored in the country directory
+| ``fabsim localhost process_acled:``
 | ``country="country",start_date="dd-mm-yyyy",filter="[earliest/fatalities]",path="\path\to\acled_csv"``
 
- - Country is the name of the country directory the acled.csv is stored in.
- - start_date uses dd--mm-yyyy format and is the date which conflict_date will be calculated from.
- - filter takes earliest or fatalities. Earliest will keep the first occurring (using date) location and remove all occurrences that location after that date. Fatalities will keep highest fatalities of each location and remove all other occurences of that location.
+ - **country** is the name of the country directory the acled.csv is stored in.
+ - **start_date** uses dd--mm-yyyy format and is the date which conflict_date will be calculated from.
+ - **filter** takes earliest or fatalities. Earliest will keep the first occurring (using date) location and remove all occurrences that location after that date. Fatalities will keep highest fatalities of each location and remove all other occurences of that location.
  - **OPTIONAL** path is the path to your acled csv file if it is not already stored in config_files.
 
 |
