@@ -39,9 +39,8 @@ Getting Conflict Data from ACLED
 |
 |   1. Rename the file acled.csv and place it in the relevant config files directory. For example, if you collected data for Mali, you would place it in '/FabFlee/Config_Files/mali'
 |
-|   2. Keep it as it is, and use a path argument when issuing the process_acled command.
+|   2. Keep it as it is, and use the ``path=`` argument when issuing the process_acled command.
 |
-
 Using the Command
 ^^^^^^^^^^^^^^^^^
 | The command uses the following syntax:
