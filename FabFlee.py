@@ -871,7 +871,7 @@ def compare_food(output_dir_1=""):
 @task
 
 # Syntax: fabsim localhost process_acled:country,start_date=dd-mm-yyyy,filter=[earliest,fatalities]
-def process_acled(country,start_date,filter):
+def process_acled(**kwargs):
     """
     Process .csv files sourced from acleddata.com to a <locations.csv> format
     Syntax:
@@ -883,12 +883,22 @@ def process_acled(country,start_date,filter):
         fatalities keeps admin2 with the highest fatalities.
 
     """
-    local("python3 %s/scripts/acled2locations.py %s %s %s %s"
-         %(get_plugin_path("FabFlee"),
-           get_plugin_path("FabFlee"),
-           country,
-           start_date,
-           filter))
+
+    if kwargs is not None:
+        local("python3 %s/scripts/acled2locations.py %s %s %s %s %s"
+             %(get_plugin_path("FabFlee"),
+               get_plugin_path("FabFlee"),
+               kwargs.get("country",""),
+               kwargs.get("start_date",""),
+               kwargs.get("filter",""), kwargs.get('path',"")))
+    else:
+        local("python3 %s/scripts/acled2locations.py %s %s %s %s"
+              % (get_plugin_path("FabFlee"),
+                 get_plugin_path("FabFlee"),
+                 kwargs.get("country",""),
+                 kwargs.get("start_date",""),
+                 kwargs.get("filter","")))
+
 
 
 

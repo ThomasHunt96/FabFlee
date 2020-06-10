@@ -5,7 +5,6 @@ import os
 import calendar as cal
 from datetime import datetime
 
-
 def month_convert(month):
     name_to_number = {name: number for number, name in enumerate(cal.month_name) if number}  # dict month : month_num
     month_num = name_to_number.get(month)  # month number in int form
@@ -89,22 +88,26 @@ def find_csv(country):
     return locations
 
 #Takes path to acled csv file, a start date in dd-mm-yyyy format, and a filter (First occurence or highest fatalities)
-def main(fab_flee_loc,country, start_date,filter):
+def main(fab_flee_loc,country,start_date,filter,**kwargs):
+
     warnings.filterwarnings('ignore')
-    input_file = os.path.join(fab_flee_loc,"config_files",
-                            country,
-                            "acled.csv")
-    print("Current Path: ",input_file)
+    if kwargs.get('path',None) is not None:
+        input_file = kwargs.get('path',None)
+    else:
+        input_file = os.path.join(fab_flee_loc,"config_files",
+                                country,"acled.csv")
     try:
         tempdf = pd.read_csv(input_file)
     except:
         print("Runtime Error: File Cannot be found")
     df = tempdf[["event_date","country","admin1","admin2",
                  "location","latitude","longitude","fatalities"]]
+
     # event_date is given in incorrect format, so formatting to dd-mm-yyyy required
     event_dates = df["event_date"].tolist()
     formatted_event_dates = [date_format(date) for date in event_dates]
     conflict_dates = [between_date(d, start_date) for d in formatted_event_dates]
+
     # replacing event_date
     df.loc[:, "event_date"] = conflict_dates
     df.rename(columns={'event_date': 'conflict_date'}, inplace=True)
@@ -118,29 +121,53 @@ def main(fab_flee_loc,country, start_date,filter):
     except:
         print("Runtime error: Filter value must be earliest or fatalities")
     # Exporting CSV to locations.csv
-    output_df = df[['location', 'admin1', 'country', 'latitude', 'longitude', 'conflict_date']]
-    output_df.rename(columns={'location': 'name', 'admin1': 'reigon'}, inplace=True)
+    output_df = df[['location', 'admin1', 'country',
+                    'latitude', 'longitude', 'conflict_date']]
+    output_df.rename(columns={'location': 'name', 'admin1': 'reigon',
+                              'latitude':'lat','longitude':'long'},
+                               inplace=True)
     output_df["location_type"] = "conflict_zone"
-    output_df["population"] = "null"
-    output_file = os.path.join(fab_flee_loc, "config_files",
-                              country,
-                              "locations.csv")
+    output_df["population/capacity"]=""
+    columns = output_df.columns
+    output_df = output_df.reindex(columns=["name", "reigon", "country","lat",
+                                           "long","location_type","conflict_date","population/capacity"])
 
-    try:
-        output_df.to_csv(output_file, index=False, mode='x')
-    except FileExistsError:
-        print("File Already exists, saving as new_locations.csv")
-        output_file = os.path.join(fab_flee_loc, "config_files",
-                                   country,
-                                   "new_locations.csv")
-        output_df.to_csv(output_file, index=False, mode='x')
+    output_dir= os.path.join(fab_flee_loc, "config_files",
+                              country,"input_csv")
+
+
+    if not os.path.isdir(output_dir):
+        os.mkdir(output_dir)
+
+    if os.path.exists(output_dir+"/locations.csv"):
+
+        i=1
+        while os.path.exists(output_dir+"/locations"+str(i)+".csv"):
+            i+=1
+        output_file = os.path.join(output_dir,"locations"+str(i)+".csv")
+
+    else:
+        output_file = os.path.join(output_dir,"locations.csv")
+
+    output_df.to_csv(output_file, index=False, mode='x')
+    print("Saved to", output_file)
+
 
 
 
 if __name__ == '__main__':
+    print(sys.argv)
+    if len(sys.argv)<6:
+        fabflee = sys.argv[1]
+        country = sys.argv[2]
+        start_date = sys.argv[3]
+        filter = sys.argv[4]
+        main(fabflee,country,start_date,filter)
 
-    fabflee = sys.argv[1]
-    country = sys.argv[2]
-    start_date = sys.argv[3]
-    filter = sys.argv[4]
-    main(fabflee,country,start_date,filter)
+    else:
+        fabflee = sys.argv[1]
+        country = sys.argv[2]
+        start_date = sys.argv[3]
+        filter = sys.argv[4]
+        path = sys.argv[5]
+        main(fabflee,country,start_date,filter,path=path)
