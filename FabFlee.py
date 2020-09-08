@@ -891,7 +891,6 @@ def process_acled(country,start_date,filter,admin_level):
            start_date,
            filter,
            admin_level))
-    print(country,start_date,filter,admin_level)
 
 
 @task
