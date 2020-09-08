@@ -871,7 +871,7 @@ def compare_food(output_dir_1=""):
 @task
 
 # Syntax: fabsim localhost process_acled:country,start_date=dd-mm-yyyy,filter=[earliest,fatalities]
-def process_acled(**kwargs):
+def process_acled(country,start_date,filter,admin_level):
     """
     Process .csv files sourced from acleddata.com to a <locations.csv> format
     Syntax:
@@ -881,25 +881,17 @@ def process_acled(**kwargs):
         filter:[earliest,fatalities]
         **earliest keeps the first occurence of each admin2,
         fatalities keeps admin2 with the highest fatalities.
-
+        admin_level: is how high the admin level you want to apply the filter to
+        i.e location, admin2, admin1
     """
-
-    if kwargs is not None:
-        local("python3 %s/scripts/acled2locations.py %s %s %s %s %s"
-             %(get_plugin_path("FabFlee"),
-               get_plugin_path("FabFlee"),
-               kwargs.get("country",""),
-               kwargs.get("start_date",""),
-               kwargs.get("filter",""), kwargs.get('path',"")))
-    else:
-        local("python3 %s/scripts/acled2locations.py %s %s %s %s"
-              % (get_plugin_path("FabFlee"),
-                 get_plugin_path("FabFlee"),
-                 kwargs.get("country",""),
-                 kwargs.get("start_date",""),
-                 kwargs.get("filter","")))
-
-
+    local("python3 %s/scripts/acled2locations.py %s %s %s %s %s"
+         %(get_plugin_path("FabFlee"),
+           get_plugin_path("FabFlee"),
+           country,
+           start_date,
+           filter,
+           admin_level))
+    print(country,start_date,filter,admin_level)
 
 
 @task
