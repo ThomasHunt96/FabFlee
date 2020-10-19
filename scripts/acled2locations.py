@@ -100,7 +100,8 @@ def main(fab_flee_loc,country, start_date,filter,admin_level):
     output_df = df[['location', 'admin1', 'country', 'latitude', 'longitude', 'conflict_date']]
     output_df.rename(columns={'location': 'name', 'admin1': 'reigon'}, inplace=True)
     output_df["location_type"] = "conflict_zone"
-    output_df["population"] = "null"
+    output_df["population"] = "10000"
+    output_df = output_df[['name', 'reigon', 'country', 'latitude', 'longitude','location_type','conflict_date','population']]
     output_file = os.path.join(fab_flee_loc, "config_files",
                               country,
                               "locations.csv")
